@@ -36,7 +36,8 @@ class RegisterView(APIView):
             validate_password(password, request.user)
         except ValidationError as e:
             return Response({
-                'error': e.messages
+                'success': False,
+                'message': e.messages
             }, status=status.HTTP_400_BAD_REQUEST)
 
         user = create_user_account(**serializer.validated_data)
@@ -44,7 +45,8 @@ class RegisterView(APIView):
         response = self.InputSerializer(user)
 
         return Response({
-            'success': 'User account created successfully.',
+            'success': True,
+            'message': 'User account created successfully.',
             'data': response.data,
             'status': status.HTTP_201_CREATED,
         }, status=status.HTTP_201_CREATED)

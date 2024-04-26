@@ -8,6 +8,7 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
 
     # Blog
-    path('blog/', blog.CreateBlogView.as_view(), name='create_blog_post'),
+    path('blog/', blog.CreateBlogView.as_view(), name='create_blog'),
+    path('blog/<int:pk>/update/', blog.UpdateBlogView.as_view(), name='update_blog'),
 
 ]
