@@ -18,4 +18,7 @@ urlpatterns = [
     # Categories
     path('', include(router.urls)),
 
+    # comment
+    path('blog/<int:pk>/comment/', blog.PostCommentView.as_view(), name='post_comment'),
+
 ]
