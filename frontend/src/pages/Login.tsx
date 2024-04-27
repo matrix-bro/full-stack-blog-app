@@ -1,6 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { resetRegistered } from "../redux/features/authSlice";
+import { login } from "../redux/features/authSlice";
+import { Navigate } from "react-router-dom";
 
 const Login = () => {
+  const { registered, isAuthenticated } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -8,12 +15,29 @@ const Login = () => {
 
   const { email, password } = formData;
 
-  const onChange = (e: any) => {
+  useEffect(() => {
+    if (registered) {
+      dispatch(resetRegistered());
+    }
+  }, [registered]);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    dispatch(login({ email, password }));
+  };
+
+  // After login success, redirect to home page
+  if (isAuthenticated) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <>
@@ -21,7 +45,10 @@ const Login = () => {
         <h1 className="mb-6 text-3xl text-center font-bold tracking-wide">
           Log In
         </h1>
-        <form className="bg-gray-100 mt-4 rounded-xl px-5 py-4">
+        <form
+          className="bg-gray-100 mt-4 rounded-xl px-5 py-4"
+          onSubmit={onSubmit}
+        >
           <div className="py-2">
             <label className="text-xl font-semibold">Email</label>
             <br />

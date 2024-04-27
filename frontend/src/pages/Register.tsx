@@ -1,22 +1,38 @@
 import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { register } from "../redux/features/authSlice";
+import { Navigate } from "react-router-dom";
 
 const Register = () => {
+  const { registered } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
     email: "",
     password: "",
-    confirm_password: "",
+    password2: "",
   });
 
-  const { first_name, last_name, email, password, confirm_password } = formData;
+  const { first_name, last_name, email, password, password2 } = formData;
 
-  const onChange = (e: any) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    dispatch(register({ first_name, last_name, email, password, password2 }));
+  };
+
+  if (registered) {
+    return <Navigate to="/login" />;
+  }
 
   return (
     <>
@@ -24,7 +40,10 @@ const Register = () => {
         <h1 className="mb-6 text-3xl text-center font-bold tracking-wide">
           Sign Up!
         </h1>
-        <form action="" className="bg-gray-100 mt-4 rounded-xl px-5 py-4">
+        <form
+          className="bg-gray-100 mt-4 rounded-xl px-5 py-4"
+          onSubmit={onSubmit}
+        >
           <div className="py-2">
             <label className="text-xl font-semibold">First Name</label>
             <br />
@@ -78,8 +97,8 @@ const Register = () => {
             <br />
             <input
               type="password"
-              name="confirm_password"
-              value={confirm_password}
+              name="password2"
+              value={password2}
               onChange={onChange}
               required
               className="border py-2 px-2 w-full"
