@@ -2,6 +2,13 @@ from rest_framework import status, serializers, permissions, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from app.models import Blog, Category, Comment, Tag
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name']  
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,12 +25,21 @@ class BlogSerializer(serializers.ModelSerializer):
         model = Blog
         fields = ['title', 'content', 'categories', 'tags'] 
 
+class CommentListSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = Comment
+        fields = ['user', 'content']
+
 class BlogListSerializer(serializers.ModelSerializer):
     categories = CategorySerializer(many=True)
     tags = TagSerializer(many=True)
+    comments = CommentListSerializer(many=True, read_only=True)
+
     class Meta:
         model = Blog
-        fields = ['id', 'title', 'content', 'categories', 'tags']         
+        fields = ['id', 'title', 'content', 'categories', 'tags', 'comments']         
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -84,6 +100,7 @@ class ReadOnlyBlogViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Blog.objects.all()
     serializer_class = BlogListSerializer
 
+    
 class PostCommentView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
