@@ -1,17 +1,29 @@
 from rest_framework import status, serializers, permissions, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from app.models import Blog, Category, Comment
+from app.models import Blog, Category, Comment, Tag
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['name', 'description']
 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ['name']
+
 class BlogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blog
         fields = ['title', 'content', 'categories', 'tags'] 
+
+class BlogListSerializer(serializers.ModelSerializer):
+    categories = CategorySerializer(many=True)
+    tags = TagSerializer(many=True)
+    class Meta:
+        model = Blog
+        fields = ['id', 'title', 'content', 'categories', 'tags']         
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -64,7 +76,14 @@ class UpdateBlogView(APIView):
             'data': serializer.data,
             'status': status.HTTP_200_OK,
         }, status=status.HTTP_200_OK)    
-    
+
+class ReadOnlyBlogViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    A viewset that provides read-only actions for the Blog model.
+    """
+    queryset = Blog.objects.all()
+    serializer_class = BlogListSerializer
+
 class PostCommentView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 

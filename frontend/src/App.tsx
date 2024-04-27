@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Home, Login, Register } from "./pages";
+import { Home, Login, PostDetail, Register } from "./pages";
 import { Layout } from "./components";
 
 const App = () => {
@@ -11,6 +11,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/blogs/:id" element={<PostDetail />} />
           </Routes>
         </Layout>
       </Router>

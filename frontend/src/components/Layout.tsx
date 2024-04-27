@@ -14,7 +14,7 @@ const Layout = (props: Props) => {
       {message && alertType && (
         <Alert message={message} alertType={alertType} />
       )}
-      <div className="relative container mx-auto mt-[7rem] min-h-screen">
+      <div className="relative mx-auto mt-[7rem] min-h-screen max-w-screen-xl px-6 lg:px-0">
         {props.children}
       </div>
     </>

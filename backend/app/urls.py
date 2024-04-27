@@ -5,6 +5,7 @@ from app.api import user, blog
 
 router = DefaultRouter()
 router.register(r'categories', blog.ReadOnlyCategoryViewSet, basename='categories')
+router.register(r'blogs', blog.ReadOnlyBlogViewSet, basename='blogs')
 
 urlpatterns = [
     path('register/', user.RegisterView.as_view(), name='register'),
@@ -15,10 +16,8 @@ urlpatterns = [
     path('blog/', blog.CreateBlogView.as_view(), name='create_blog'),
     path('blog/<int:pk>/update/', blog.UpdateBlogView.as_view(), name='update_blog'),
 
-    # Categories
-    path('', include(router.urls)),
-
     # comment
     path('blog/<int:pk>/comment/', blog.PostCommentView.as_view(), name='post_comment'),
 
+    path('', include(router.urls)),
 ]
