@@ -1,6 +1,10 @@
-from django.urls import path
+from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework.routers import DefaultRouter
 from app.api import user, blog
+
+router = DefaultRouter()
+router.register(r'categories', blog.ReadOnlyCategoryViewSet, basename='categories')
 
 urlpatterns = [
     path('register/', user.RegisterView.as_view(), name='register'),
@@ -10,5 +14,8 @@ urlpatterns = [
     # Blog
     path('blog/', blog.CreateBlogView.as_view(), name='create_blog'),
     path('blog/<int:pk>/update/', blog.UpdateBlogView.as_view(), name='update_blog'),
+
+    # Categories
+    path('', include(router.urls)),
 
 ]
