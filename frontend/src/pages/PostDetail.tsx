@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { BlogDetailsProps } from "../types";
 import { useAppSelector } from "../redux/hooks";
 
@@ -25,7 +25,7 @@ const PostDetail = () => {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!isAuthenticated) {
+    if (localStorage.getItem("token") == null) {
       alert("You need to login first!");
       return;
     }
@@ -45,6 +45,7 @@ const PostDetail = () => {
 
       console.log(response.data);
       window.location.reload();
+      window.scrollTo(0, 0);
     } catch (error) {
       console.log(error);
     }

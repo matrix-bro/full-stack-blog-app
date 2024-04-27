@@ -1,6 +1,10 @@
 import { Link, NavLink } from "react-router-dom";
+import { useAppDispatch } from "../redux/hooks";
+import { logout } from "../redux/features/authSlice";
+import { displayAlert } from "../redux/features/alertSlice";
 
 const Navbar = () => {
+  const dispatch = useAppDispatch();
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 py-2 border-gray-200 bg-gray-900 border-b z-10 uppercase">
@@ -27,22 +31,44 @@ const Navbar = () => {
                   Home
                 </NavLink>
               </li>
-              <li>
-                <NavLink
-                  to="/login"
-                  className="block py-2 px-3 rounded md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 md:hover:bg-transparent border-gray-700"
-                >
-                  Login
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/register"
-                  className="block py-2 px-3 rounded md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 md:hover:bg-transparent border-gray-700"
-                >
-                  Register
-                </NavLink>
-              </li>
+              {localStorage.getItem("token") ? (
+                <li>
+                  <NavLink
+                    to="/login"
+                    className="block py-2 px-3 rounded md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 md:hover:bg-transparent border-gray-700"
+                    onClick={() => {
+                      dispatch(logout());
+                      dispatch(
+                        displayAlert({
+                          alertType: "info",
+                          message: "Logged out successfully.",
+                        })
+                      );
+                    }}
+                  >
+                    Logout
+                  </NavLink>
+                </li>
+              ) : (
+                <>
+                  <li>
+                    <NavLink
+                      to="/login"
+                      className="block py-2 px-3 rounded md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 md:hover:bg-transparent border-gray-700"
+                    >
+                      Login
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/register"
+                      className="block py-2 px-3 rounded md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 md:hover:bg-transparent border-gray-700"
+                    >
+                      Register
+                    </NavLink>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
         </div>

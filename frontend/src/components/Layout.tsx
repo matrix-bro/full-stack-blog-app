@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { Alert, Navbar } from ".";
 import { useAppSelector } from "../redux/hooks";
+
 interface Props {
   children: ReactNode;
 }
