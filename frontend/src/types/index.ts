@@ -4,11 +4,13 @@ export interface BlogListProps {
   content: string;
 }
 
-interface Tag {
+export interface Tag {
+  id: number;
   name: string;
 }
 
-interface Category {
+export interface Category {
+  id: number;
   name: string;
 }
 

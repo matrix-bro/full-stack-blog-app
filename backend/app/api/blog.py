@@ -13,12 +13,12 @@ class UserSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['name', 'description']
+        fields = ['id', 'name', 'description']
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ['name']
+        fields = ['id', 'name']
 
 class BlogSerializer(serializers.ModelSerializer):
     class Meta:
@@ -52,6 +52,13 @@ class ReadOnlyCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+class ReadOnlyTagViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    A viewset that provides read-only actions for the Tag model.
+    """
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
 
 class CreateBlogView(APIView):
     permission_classes = [permissions.IsAuthenticated]

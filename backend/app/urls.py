@@ -6,6 +6,7 @@ from app.api import user, blog
 router = DefaultRouter()
 router.register(r'categories', blog.ReadOnlyCategoryViewSet, basename='categories')
 router.register(r'blogs', blog.ReadOnlyBlogViewSet, basename='blogs')
+router.register(r'tags', blog.ReadOnlyTagViewSet, basename='tags')
 
 urlpatterns = [
     path('register/', user.RegisterView.as_view(), name='register'),

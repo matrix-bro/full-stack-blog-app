@@ -32,23 +32,33 @@ const Navbar = () => {
                 </NavLink>
               </li>
               {localStorage.getItem("token") ? (
-                <li>
-                  <NavLink
-                    to="/login"
-                    className="block py-2 px-3 rounded md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 md:hover:bg-transparent border-gray-700"
-                    onClick={() => {
-                      dispatch(logout());
-                      dispatch(
-                        displayAlert({
-                          alertType: "info",
-                          message: "Logged out successfully.",
-                        })
-                      );
-                    }}
-                  >
-                    Logout
-                  </NavLink>
-                </li>
+                <>
+                  <li>
+                    <NavLink
+                      to="/blog/new"
+                      className="block py-2 px-3 rounded md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 md:hover:bg-transparent border-gray-700"
+                    >
+                      New Post
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/login"
+                      className="block py-2 px-3 rounded md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 md:hover:bg-transparent border-gray-700"
+                      onClick={() => {
+                        dispatch(logout());
+                        dispatch(
+                          displayAlert({
+                            alertType: "info",
+                            message: "Logged out successfully.",
+                          })
+                        );
+                      }}
+                    >
+                      Logout
+                    </NavLink>
+                  </li>
+                </>
               ) : (
                 <>
                   <li>

@@ -1,11 +1,9 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { BlogDetailsProps } from "../types";
-import { useAppSelector } from "../redux/hooks";
 
 const PostDetail = () => {
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const { id } = useParams();
   const [blogDetails, setBlogDetails] = useState<BlogDetailsProps>(Object);
   const [content, setContent] = useState("");
