@@ -2,6 +2,7 @@ from rest_framework import status, serializers, permissions, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from app.models import Blog, Category, Comment, Tag
+from rest_framework.pagination import PageNumberPagination
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -106,7 +107,7 @@ class ReadOnlyBlogViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = Blog.objects.all()
     serializer_class = BlogListSerializer
-
+    pagination_class = PageNumberPagination
     
 class PostCommentView(APIView):
     permission_classes = [permissions.IsAuthenticated]
