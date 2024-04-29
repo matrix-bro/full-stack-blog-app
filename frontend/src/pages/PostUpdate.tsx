@@ -1,18 +1,28 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { BlogFormFields, CategoryProps, TagProps } from "../types";
+import {
+  BlogDetailsProps,
+  BlogFormFields,
+  CategoryProps,
+  TagProps,
+} from "../types";
+import { useParams } from "react-router-dom";
 
-const CreatePost = () => {
+const PostUpdate = () => {
+  const [blogDetails, setBlogDetails] = useState<BlogDetailsProps>(Object);
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitSuccessful },
+    setValue,
     reset,
   } = useForm<BlogFormFields>();
 
   const [categories, setCategories] = useState<CategoryProps[]>([]);
   const [tags, setTags] = useState<TagProps[]>([]);
+  const { id } = useParams();
 
   const onSubmit: SubmitHandler<BlogFormFields> = async (data) => {
     console.log(data);
@@ -24,8 +34,8 @@ const CreatePost = () => {
     };
 
     try {
-      const response = await axios.post(
-        `http://localhost:8000/api/blog/`,
+      const response = await axios.put(
+        `http://localhost:8000/api/blog/${id}/update/`,
         data,
         config
       );
@@ -53,21 +63,43 @@ const CreatePost = () => {
       }
     };
 
+    // fetch blog details
+    const fetchBlogDetails = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8000/api/blogs/${id}`);
+        // console.log(res.data);
+        setBlogDetails(res.data);
+        setValue("title", res.data.title);
+        setValue("content", res.data.content);
+
+        const defCatIds = res.data.categories.map((category: CategoryProps) =>
+          category.id.toString()
+        );
+        const defTagIds = res.data.tags.map((tag: TagProps) =>
+          tag.id.toString()
+        );
+        reset({ categories: defCatIds, tags: defTagIds });
+      } catch (error) {
+        console.error("Error fetching blog details:", error);
+      }
+    };
+
     fetchCategoriesAndTags();
+    fetchBlogDetails();
   }, []);
 
-  // after form submission
+  //   after form submission
   useEffect(() => {
     if (isSubmitSuccessful) {
-      reset();
-      alert("Created a New Post!");
+      alert("Updated Post Successfully!");
+      window.location.reload();
     }
   }, [isSubmitSuccessful]);
 
   return (
     <div className="md:w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
       <h1 className="mb-6 text-3xl text-center font-bold tracking-wide">
-        Create a New Post!
+        Update "{blogDetails.title}"
       </h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
@@ -144,4 +176,4 @@ const CreatePost = () => {
   );
 };
 
-export default CreatePost;
+export default PostUpdate;

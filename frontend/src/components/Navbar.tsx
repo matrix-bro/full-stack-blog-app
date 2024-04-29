@@ -35,6 +35,14 @@ const Navbar = () => {
                 <>
                   <li>
                     <NavLink
+                      to="/dashboard"
+                      className="block py-2 px-3 rounded md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 md:hover:bg-transparent border-gray-700"
+                    >
+                      Dashboard
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
                       to="/blog/new"
                       className="block py-2 px-3 rounded md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 md:hover:bg-transparent border-gray-700"
                     >

@@ -1,6 +1,7 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { Alert, Navbar } from ".";
-import { useAppSelector } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { verifyAuth } from "../redux/features/authSlice";
 
 interface Props {
   children: ReactNode;
@@ -8,6 +9,13 @@ interface Props {
 
 const Layout = (props: Props) => {
   const { message, alertType } = useAppSelector((state) => state.alert);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (localStorage.getItem("token") !== null) {
+      dispatch(verifyAuth());
+    }
+  }, [localStorage.getItem("token")]);
 
   return (
     <>

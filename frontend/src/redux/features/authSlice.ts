@@ -116,6 +116,33 @@ export const login = createAsyncThunk(
   }
 );
 
+export const verifyAuth = createAsyncThunk(
+  "auth/verify",
+  async (_, thunkAPI) => {
+    try {
+      const ac_token = localStorage.getItem("token");
+      const data = {
+        token: ac_token,
+      };
+      const response = await axios.post(
+        "http://localhost:8000/api/token/verify/",
+        data
+      );
+
+      if (response.status === 200) {
+        console.log("Verified");
+        return response.data;
+      } else {
+        console.log("Not Verified");
+        return thunkAPI.rejectWithValue(response.data);
+      }
+    } catch (error: any) {
+      console.log("ERROR Verification", error.response.data);
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 interface AuthState {
   token: string | null;
   isAuthenticated: boolean;
@@ -166,6 +193,18 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state) => {
         state.loading = false;
+      })
+      .addCase(verifyAuth.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(verifyAuth.fulfilled, (state) => {
+        state.loading = false;
+        state.isAuthenticated = true;
+      })
+      .addCase(verifyAuth.rejected, (state) => {
+        state.loading = false;
+        state.isAuthenticated = false;
+        localStorage.removeItem("token");
       });
   },
 });

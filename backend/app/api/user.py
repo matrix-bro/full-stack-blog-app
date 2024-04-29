@@ -1,9 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, serializers
+from rest_framework import status, serializers, permissions
 from app.services.user_services import create_user_account
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from app.models import Blog
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -50,3 +51,25 @@ class RegisterView(APIView):
             'data': response.data,
             'status': status.HTTP_201_CREATED,
         }, status=status.HTTP_201_CREATED)
+    
+class RetreiveUserView(APIView):
+    class OutputSerializer(serializers.ModelSerializer):
+        class BlogSerializer(serializers.ModelSerializer):
+            class Meta:
+                model = Blog
+                fields = ['id', 'title', 'content'] 
+        
+        blog_posts = BlogSerializer(many=True)
+
+        class Meta:
+            model = User
+            fields = ('first_name', 'last_name', 'email', 'blog_posts')
+
+
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get(self, request):
+        user = request.user
+        response = self.OutputSerializer(user)
+
+        return Response(response.data, status=status.HTTP_200_OK)  

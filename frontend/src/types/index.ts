@@ -4,12 +4,12 @@ export interface BlogListProps {
   content: string;
 }
 
-export interface Tag {
+export interface TagProps {
   id: number;
   name: string;
 }
 
-export interface Category {
+export interface CategoryProps {
   id: number;
   name: string;
 }
@@ -25,7 +25,14 @@ export interface BlogDetailsProps {
   id: number;
   title: string;
   content: string;
-  categories: Category[];
-  tags: Tag[];
+  categories: CategoryProps[];
+  tags: TagProps[];
   comments?: Comment[];
 }
+
+export type BlogFormFields = {
+  title: string;
+  content: string;
+  categories: string[];
+  tags: string[];
+};

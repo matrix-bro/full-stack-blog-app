@@ -1,5 +1,5 @@
 from django.urls import path, include
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from rest_framework.routers import DefaultRouter
 from app.api import user, blog
 
@@ -12,6 +12,8 @@ urlpatterns = [
     path('register/', user.RegisterView.as_view(), name='register'),
     path('token/', TokenObtainPairView.as_view(), name='login'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
+    path('token/verify/', TokenVerifyView.as_view(), name='token-verify'),
+    path('me/', user.RetreiveUserView.as_view(), name='me'),
 
     # Blog
     path('blog/', blog.CreateBlogView.as_view(), name='create_blog'),

@@ -23,7 +23,7 @@ const PostDetail = () => {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (localStorage.getItem("token") == null) {
+    if (localStorage.getItem("token") === null) {
       alert("You need to login first!");
       return;
     }

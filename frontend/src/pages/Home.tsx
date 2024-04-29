@@ -20,8 +20,6 @@ const Home = () => {
     fetchBlogs();
   }, []);
 
-  // console.log(blogs);
-
   return (
     <>
       <h1 className="text-center text-3xl">Recent Blogs</h1>

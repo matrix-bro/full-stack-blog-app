@@ -1,6 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { CreatePost, Home, Login, PostDetail, Register } from "./pages";
-import { Layout } from "./components";
+import {
+  CreatePost,
+  Dashboard,
+  Home,
+  Login,
+  PostDetail,
+  PostUpdate,
+  Register,
+} from "./pages";
+import { Layout, PrivateRoute } from "./components";
 
 const App = () => {
   return (
@@ -12,7 +20,12 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/blogs/:id" element={<PostDetail />} />
-            <Route path="/blog/new" element={<CreatePost />} />
+
+            <Route element={<PrivateRoute />}>
+              <Route path="/blog/new" element={<CreatePost />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/blog/:id/update" element={<PostUpdate />} />
+            </Route>
           </Routes>
         </Layout>
       </Router>
