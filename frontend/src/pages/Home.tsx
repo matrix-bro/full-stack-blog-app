@@ -45,9 +45,8 @@ const Home = () => {
         dataLength={blogs.length}
         next={fetchMoreBlogs}
         hasMore={hasMore}
-        loader={<p className="text-center">...</p>}
+        loader={<p className="text-center">Scroll to load more...</p>}
         endMessage={<p className="text-center">No more items to load!</p>}
-        scrollThreshold={0.9}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-8 px-8">
           {blogs.map((blog: BlogListProps, index) => (

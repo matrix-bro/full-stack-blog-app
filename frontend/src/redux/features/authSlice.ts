@@ -97,6 +97,12 @@ export const login = createAsyncThunk(
           displayAlert({ message: "Login Successfull", alertType: "success" })
         );
 
+        // Session expires after 30 min = 30 * 60 * 1000
+        setTimeout(() => {
+          thunkAPI.dispatch(logout());
+          window.location.reload();
+        }, 1000 * 60 * 30);
+
         return response.data.access;
       } else {
         return thunkAPI.rejectWithValue(response.data);
