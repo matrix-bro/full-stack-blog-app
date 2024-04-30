@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
+  Categories,
   CreatePost,
   Dashboard,
   Home,
@@ -19,6 +20,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/categories" element={<Categories />} />
             <Route path="/blogs/:id" element={<PostDetail />} />
 
             <Route element={<PrivateRoute />}>

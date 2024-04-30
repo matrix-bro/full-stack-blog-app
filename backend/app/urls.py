@@ -4,7 +4,6 @@ from rest_framework.routers import DefaultRouter
 from app.api import user, blog
 
 router = DefaultRouter()
-router.register(r'categories', blog.ReadOnlyCategoryViewSet, basename='categories')
 router.register(r'blogs', blog.ReadOnlyBlogViewSet, basename='blogs')
 router.register(r'tags', blog.ReadOnlyTagViewSet, basename='tags')
 
@@ -14,6 +13,10 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token-verify'),
     path('me/', user.RetreiveUserView.as_view(), name='me'),
+
+    # Categories
+    path('categories/', blog.AllCategoriesView.as_view(), name='all_categories'),
+    path('category/<int:pk>/blogs/', blog.CategoryBlogsView.as_view(), name='category_blogs'),
 
     # Blog
     path('blog/', blog.CreateBlogView.as_view(), name='create_blog'),

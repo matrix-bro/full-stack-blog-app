@@ -31,6 +31,14 @@ const Navbar = () => {
                   Home
                 </NavLink>
               </li>
+              <li>
+                <NavLink
+                  to="/categories"
+                  className="block py-2 px-3 rounded md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 md:hover:bg-transparent border-gray-700"
+                >
+                  Categories
+                </NavLink>
+              </li>
               {localStorage.getItem("token") ? (
                 <>
                   <li>

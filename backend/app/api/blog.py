@@ -1,4 +1,5 @@
-from rest_framework import status, serializers, permissions, viewsets
+from django.shortcuts import get_object_or_404
+from rest_framework import status, serializers, permissions, viewsets, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from app.models import Blog, Category, Comment, Tag
@@ -45,14 +46,26 @@ class BlogListSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ['content']                
+        fields = ['content']                     
 
-class ReadOnlyCategoryViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    A viewset that provides read-only actions for the Category model.
-    """
+
+class AllCategoriesView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+class CategoryBlogsView(APIView, PageNumberPagination):
+    class OutputSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Blog
+            fields = ['id', 'title', 'content']
+
+    def get(self, request, pk):
+        category = get_object_or_404(Category, pk=pk)
+
+        blogs = category.blog_posts.all()
+        paginated_blogs = self.paginate_queryset(blogs, request)
+        serializer = self.OutputSerializer(paginated_blogs, many=True)
+        return self.get_paginated_response(serializer.data)
 
 class ReadOnlyTagViewSet(viewsets.ReadOnlyModelViewSet):
     """
@@ -81,14 +94,7 @@ class UpdateBlogView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def put(self, request, pk):
-        try:
-            blog_post = Blog.objects.get(pk=pk)
-        except Blog.DoesNotExist:
-            return Response({
-                'success': False,
-                'message': 'Blog post does not exist.',
-                'status': status.HTTP_404_NOT_FOUND,
-            }, status=status.HTTP_404_NOT_FOUND)
+        blog_post = get_object_or_404(Blog, pk=pk)
 
         serializer = BlogSerializer(blog_post, data=request.data)
         serializer.is_valid(raise_exception=True)
