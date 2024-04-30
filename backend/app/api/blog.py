@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from app.models import Blog, Category, Comment, Tag
 from rest_framework.pagination import PageNumberPagination
+from app.permissions import IsOwnerOrReadOnly
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -91,10 +92,11 @@ class CreateBlogView(APIView):
         }, status=status.HTTP_201_CREATED)        
     
 class UpdateBlogView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
 
     def put(self, request, pk):
         blog_post = get_object_or_404(Blog, pk=pk)
+        self.check_object_permissions(request, blog_post)
 
         serializer = BlogSerializer(blog_post, data=request.data)
         serializer.is_valid(raise_exception=True)

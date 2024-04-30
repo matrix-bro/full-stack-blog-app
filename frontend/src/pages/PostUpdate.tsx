@@ -15,7 +15,7 @@ const PostUpdate = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitSuccessful },
+    formState: { errors },
     setValue,
     reset,
   } = useForm<BlogFormFields>();
@@ -41,7 +41,10 @@ const PostUpdate = () => {
       );
 
       console.log(response.data);
+      alert("Updated Post Successfully!");
+      window.location.reload();
     } catch (error) {
+      alert("Failed to update post details.");
       console.log(error);
     }
   };
@@ -87,14 +90,6 @@ const PostUpdate = () => {
     fetchCategoriesAndTags();
     fetchBlogDetails();
   }, []);
-
-  //   after form submission
-  useEffect(() => {
-    if (isSubmitSuccessful) {
-      alert("Updated Post Successfully!");
-      window.location.reload();
-    }
-  }, [isSubmitSuccessful]);
 
   return (
     <div className="md:w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
